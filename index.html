@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Assignment Problem Solver</title>
+  <style>
+    body { font-family: Arial; text-align: center; padding: 50px; background: #f0f0f0; }
+    table { margin: 0 auto; border-collapse: collapse; }
+    th, td { border: 1px solid #aaa; padding: 10px; }
+    input[type="number"] { width: 50px; }
+    button { margin-top: 20px; padding: 10px 20px; background: #007bff; color: #fff; border: none; cursor: pointer; }
+    .result { margin-top: 30px; font-size: 18px; }
+    .result ul { list-style: none; padding: 0; }
+    .result li { margin: 5px 0; font-weight: 500; }
+    .algorithm-select { margin-top: 20px; }
+  </style>
+</head>
+<body>
+
+  <h2>Assignment Problem Solver</h2>
+
+  <form method="POST" action="/solve">
+
+    <table>
+      <tr>
+        <th></th><th>Job 1</th><th>Job 2</th><th>Job 3</th>
+      </tr>
+      {% for i in range(3) %}
+      <tr>
+        <th>Person {{ i+1 }}</th>
+        {% for j in range(3) %}
+        <td><input type="number" name="cost" required></td>
+        {% endfor %}
+      </tr>
+      {% endfor %}
+    </table>
+
+    <div class="algorithm-select">
+      <label for="algorithm">Choose Algorithm:</label>
+      <select name="algorithm" id="algorithm" required>
+        <option value="brute">Brute Force</option>
+        <option value="transform">Hungarian (Transform and Conquer)</option>
+      </select>
+    </div>
+
+    <button type="submit">Solve</button>
+
+  </form>
+
+  {% if result %}
+  <div class="result">
+    <h3>Optimal Assignment ({{ method_display }}):</h3>
+    <ul>
+      {% for i, j, c in result %}
+      <li>Person {{ i }} → Job {{ j }} (Cost: {{ c }})</li>
+      {% endfor %}
+    </ul>
+    <strong>Total Minimum Cost: {{ total }}</strong><br>
+    <strong>Runtime:</strong> {{ runtime }} seconds
+
+    <hr style="margin: 20px 0;">
+
+    <h4>Time and Space Complexity:</h4>
+    <ul>
+      <li><strong>Best Case Time:</strong> {{ complexities.time_best }}</li>
+      <li><strong>Worst Case Time:</strong> {{ complexities.time_worst }}</li>
+      <li><strong>Space Complexity:</strong> {{ complexities.space }}</li>
+    </ul>
+  </div>
+  {% endif %}
+
+</body>
+</html>
